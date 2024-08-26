@@ -34,6 +34,13 @@ gulp.task("html", function () {
     .pipe(browserSync.stream());
 });
 
+gulp.task("images", function () {
+  return gulp
+    .src("src/images/**/*", { encoding: false })
+    .pipe(gulp.dest("dist/images"))
+    .pipe(browserSync.stream());
+});
+
 // Watch files for changes
 gulp.task("watch", function () {
   browserSync.init({
@@ -44,10 +51,12 @@ gulp.task("watch", function () {
 
   gulp.watch("src/scss/**/*.scss", gulp.series("styles"));
   gulp.watch("src/js/**/*.js", gulp.series("scripts"));
-  gulp
-    .watch("src/**/*.html", gulp.series("html"))
-    .on("change", browserSync.reload);
+  gulp.watch("src/**/*.html", gulp.series("html"));
+  gulp.watch("src/images/**/*", gulp.series("images"));
 });
 
 // Default task
-gulp.task("default", gulp.series("styles", "scripts", "html", "watch"));
+gulp.task(
+  "default",
+  gulp.series("styles", "scripts", "html", "images", "watch")
+);
